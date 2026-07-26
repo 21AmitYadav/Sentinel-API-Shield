@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, HTTPException, status
-
+from app.dependencies.auth import get_current_user
+from app.models.user import User
 from app.repositories.user_repository import UserRepository
 from app.services.auth_service import AuthService
 from app.schemas.auth import RegisterRequest, RegisterResponse
@@ -38,3 +39,8 @@ def login(login_request:LoginRequest,db:Session = Depends(get_db))->LoginRespons
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=str(e)
         )
+    
+@router.get("/me",response_model=RegisterResponse,status_code=status.HTTP_200_OK)
+def get_me(current_user: User = Depends(get_current_user)) -> RegisterResponse:
+
+    return current_user
