@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, Integer, String, DateTime, Boolean
 from sqlalchemy.sql import func
 
 from app.config.database import Base
@@ -14,7 +14,7 @@ class ApiKey(Base):
 
     name = Column(String(100), nullable=False)
 
-    active = Column(bool, nullable=False, default=True)
+    active = Column(Boolean, nullable=False, default=True)
 
     expiry_date = Column(DateTime(timezone=True), nullable=True)
 
