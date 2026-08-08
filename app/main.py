@@ -11,14 +11,14 @@ app = FastAPI(
     version="1.0.0",
 )
 
+app.middleware("http")(logging_middleware)
+
 
 app.include_router(
     auth_router,
     prefix="/api/v1/auth",
     tags=["Authentication"],
 )
-
-app.middleware("http")(logging_middleware)
 
 @app.get("/")
 def root():
