@@ -1,12 +1,10 @@
-import time
-
 from fastapi import Request
 from starlette.responses import Response
 from app.services.rate_limit_service import RateLimitService
 from app.security.jwt_handler import decode_access_token
 
 async def rate_limit_middleware(request: Request, call_next):
-
+    print("🚦 RATE LIMIT MIDDLEWARE:", request.url.path)    
     userId = None
 
     authorization = request.headers.get("Authorization")

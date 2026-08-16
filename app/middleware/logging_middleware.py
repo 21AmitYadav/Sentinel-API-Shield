@@ -61,9 +61,6 @@ async def logging_middleware(request: Request, call_next):
                 user_agent=request.headers.get("User-Agent"),
                 response_time=process_time,
             )
-            print("🌐 CLIENT:", request.client)
-            print("🌐 IP:", request.client.host if request.client else None)
-            print("✅ LOG SAVED SUCCESSFULLY")
 
         except Exception as e:
             print("❌ REQUEST LOGGING ERROR:", repr(e))     
