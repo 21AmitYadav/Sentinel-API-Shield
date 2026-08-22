@@ -40,5 +40,15 @@ class ApiKeyService:
 
         self.api_key_repository.deactivate_api_key(api_key_id)
 
+    
+    def get_api_key_by_hash(self,key_hash:str)->ApiKey|None:
+        data = self.api_key_repository.find_api_key_by_hash(key_hash)
+        if data is None:
+            raise HTTPException(status_code=404, detail="API key not found")
+        
+        if data.active is False:
+            raise HTTPException(status_code=403, detail="API key is revoked")
+        
+        return data
 
 
