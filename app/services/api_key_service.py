@@ -10,7 +10,7 @@ class ApiKeyService:
         self.api_key_repository = api_key_repository
 
     def create_api_key(self, user_id: int, api_key_request: ApiKeyCreateRequest) -> ApiKeyCreateResponse:
-        # Generate a new API key and its hash
+        # Generate a new API key and its hash it
         api_key = generate_api_key()
         key_hash = hash_api_key(api_key)
         api_key_model = ApiKey(
