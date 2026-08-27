@@ -1,6 +1,8 @@
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, HTTPException, status
+from app.dependencies.api_key_auth import get_api_key_service
 from app.dependencies.auth import get_current_user
+from app.models.api_key import ApiKey
 from app.models.user import User
 from app.repositories.api_key_repository import ApiKeyRepository
 from app.services.api_key_service import ApiKeyService
@@ -65,3 +67,13 @@ def revoke_api_key(api_key_id: int, current_user: User = Depends(get_current_use
     api_key_repository = ApiKeyRepository(db)
     api_key_service = ApiKeyService(api_key_repository)
     api_key_service.revoke_api_key(api_key_id, current_user.id)
+
+@router.get("/test/protected", status_code=status.HTTP_200_OK)
+def test_protected_route(api_key: ApiKey = Depends(get_api_key_service)):
+    return {
+        "message": "You are authenticated",
+        "user_id": api_key.user_id
+    }
+
+
+     
