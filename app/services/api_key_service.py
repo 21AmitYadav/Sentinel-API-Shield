@@ -10,7 +10,7 @@ class ApiKeyService:
         self.api_key_repository = api_key_repository
 
     def create_api_key(self, user_id: int, api_key_request: ApiKeyCreateRequest) -> ApiKeyCreateResponse:
-        # Generate a new API key and its hash
+        # Generate a new API key and its hash it
         api_key = generate_api_key()
         key_hash = hash_api_key(api_key)
         api_key_model = ApiKey(
@@ -40,5 +40,15 @@ class ApiKeyService:
 
         self.api_key_repository.deactivate_api_key(api_key_id)
 
+    
+    def get_api_key_by_hash(self,key_hash:str)->ApiKey|None:
+        data = self.api_key_repository.find_api_key_by_hash(key_hash)
+        if data is None:
+            raise HTTPException(status_code=404, detail="API key not found")
+        
+        if data.active is False:
+            raise HTTPException(status_code=403, detail="API key is revoked")
+        
+        return data
 
 

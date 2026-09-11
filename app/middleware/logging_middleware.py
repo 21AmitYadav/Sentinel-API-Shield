@@ -12,6 +12,8 @@ from app.services.logging_service import LoggingService
 async def logging_middleware(request: Request, call_next):
 
     # 1. Start timer
+    print("🔥 MIDDLEWARE RUNNING:", request.method, request.url.path)
+
     start_time = time.time()
 
     # 2. Default values
@@ -60,8 +62,9 @@ async def logging_middleware(request: Request, call_next):
                 response_time=process_time,
             )
 
-        except Exception:
-            # Never break the request because logging failed
+        except Exception as e:
+            print("❌ REQUEST LOGGING ERROR:", repr(e))     
+            
             pass
 
         finally:
