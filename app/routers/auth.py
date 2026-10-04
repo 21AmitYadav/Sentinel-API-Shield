@@ -12,6 +12,7 @@ from app.schemas.auth import RegisterRequest, RegisterResponse
 from app.schemas.auth import LoginRequest, LoginResponse
 from app.schemas.api_key import ApiKeyCreateRequest, ApiKeyCreateResponse, ApiKeyListResponse
 from app.config.database import get_db
+from app.security.authorization import require_permission
 
 
 router = APIRouter()
@@ -75,5 +76,10 @@ def test_protected_route(api_key: ApiKey = Depends(get_api_key_service)):
         "user_id": api_key.user_id
     }
 
-
+@router.get("/test/read-products", status_code=status.HTTP_200_OK)
+def test_read_products(api_key: ApiKey = Depends(require_permission("READ_PRODUCTS"))):
+    return {
+        "message": "You have permission to read products",
+        "user_id": api_key.id
+    }
      
