@@ -6,6 +6,7 @@ from app.models.user import User
 from app.models.api_key import ApiKey
 from app.models.permission import Permission
 from app.models.api_key_permission import ApiKeyPermission
+from app.routers.api_key_permissions import router as api_key_permission_router
 from app.models.request_log import RequestLog
 from app.routers.permissions import router as permission_router
 import os
@@ -35,6 +36,12 @@ app.include_router(
     permission_router,
     prefix="/api/v1/permissions",
     tags=["Permissions"]
+)
+
+app.include_router(
+    api_key_permission_router,
+    prefix="/api/v1/api-keys",
+    tags=["API Key Permissions"]
 )
 
 @app.get("/")

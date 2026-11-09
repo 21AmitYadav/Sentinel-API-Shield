@@ -1,6 +1,9 @@
-from app.models.api_key_permission import ApiKeyPermission
+
 from sqlalchemy.orm import Session
+
+from app.models.api_key_permission import ApiKeyPermission
 from app.models.permission import Permission
+
 
 class ApiKeyPermissionRepository:
 
@@ -8,7 +11,9 @@ class ApiKeyPermissionRepository:
         self.db = db
 
     def give_permission_to_api_key(
-        self, api_key_id: int, permission_id: int
+        self,
+        api_key_id: int,
+        permission_id: int
     ) -> ApiKeyPermission:
 
         api_key_permission = ApiKeyPermission(
@@ -23,7 +28,9 @@ class ApiKeyPermissionRepository:
         return api_key_permission
 
     def check_permission_for_api_key(
-        self, api_key_id: int, permission_name: str
+        self,
+        api_key_id: int,
+        permission_name: str
     ) -> bool:
 
         permission = (
@@ -47,7 +54,8 @@ class ApiKeyPermissionRepository:
         return api_key_permission is not None
 
     def get_permissions_for_api_key(
-        self, api_key_id: int
+        self,
+        api_key_id: int
     ) -> list[Permission]:
 
         return (
@@ -61,7 +69,9 @@ class ApiKeyPermissionRepository:
         )
 
     def remove_permission_from_api_key(
-        self, api_key_id: int, permission_id: int
+        self,
+        api_key_id: int,
+        permission_id: int
     ) -> None:
 
         self.db.query(ApiKeyPermission).filter(
@@ -70,29 +80,3 @@ class ApiKeyPermissionRepository:
         ).delete()
 
         self.db.commit()
-
-    def check_permission_for_api_key(db: Session, api_key_id: int, permission_name: str) -> bool:   
-        permission = db.query(Permission).filter(Permission.name == permission_name).first()
-        if not permission:
-            return False
-        api_key_permission = db.query(ApiKeyPermission).filter(
-        ApiKeyPermission.api_key_id == api_key_id,
-        ApiKeyPermission.permission_id == permission.id
-    ).first()
-        return api_key_permission is not None
-
-    def get_permissions_for_api_key(db: Session, api_key_id: int) -> list[Permission]:
-        permissions = (
-        db.query(Permission)
-        .join(ApiKeyPermission, Permission.id == ApiKeyPermission.permission_id)
-        .filter(ApiKeyPermission.api_key_id == api_key_id)
-        .all()
-        )
-        return permissions
-
-    def remove_permission_from_api_key(db: Session, api_key_id: int, permission_id: int) -> None:
-        db.query(ApiKeyPermission).filter(
-        ApiKeyPermission.api_key_id == api_key_id,
-        ApiKeyPermission.permission_id == permission_id
-    ).delete()
-        db.commit()
