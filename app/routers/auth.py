@@ -79,7 +79,8 @@ def test_protected_route(api_key: ApiKey = Depends(get_api_key_service)):
 @router.get("/test/read-products", status_code=status.HTTP_200_OK)
 def test_read_products(api_key: ApiKey = Depends(require_permission("READ_PRODUCTS"))):
     return {
-        "message": "You have permission to read products",
-        "user_id": api_key.id
+    "message": "You have permission to read products",
+    "api_key_id": api_key.id,
+    "user_id": api_key.user_id
     }
      
